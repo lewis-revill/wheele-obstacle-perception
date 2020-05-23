@@ -28,11 +28,15 @@ endif()
 
 # Directories and sources.
 
+set(WDP_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/../wheele-depth-perception/include)
+
 set(WOP_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 set(WOP_DATA_DIR ${CMAKE_SOURCE_DIR}/data)
 set(WOP_TEST_DIR ${CMAKE_SOURCE_DIR}/test)
 
-# add_subdirectory(lib)
+include_directories(${WDP_INCLUDE_DIR})
+
+add_subdirectory(lib)
 add_subdirectory(tools)
 
 configure_file(WOPConfig.h.in WOPConfig.h)

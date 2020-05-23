@@ -22,6 +22,7 @@ target_include_directories(wop-app PUBLIC
   )
 
 target_link_libraries(wop-app PUBLIC
+  WOP
   ${Boost_LIBRARIES}
   ${JPEG_LIBRARIES}
   )

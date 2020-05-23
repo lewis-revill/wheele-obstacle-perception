@@ -8,6 +8,16 @@ This output is intended to be processed by the localisation subsystem in order t
 
 #### Specification
 
+This project enables a 2D map to be created showing obstacles in the area surrounding the wheelchair. For this purpose the following inputs are required:
+
+- Two RGB images
+
+- The distance between each camera
+
+The following outputs are expected:
+
+- A 2D labelled occupancy map showing presence or absence of objects
+
 #### Design
 
 #### Implementation
