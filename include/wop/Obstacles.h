@@ -35,15 +35,16 @@ namespace wop {
 /// the obstacle at those coordinates.
 template <typename LHSImage, typename RHSImage>
 Location locateObstacleAtCoordinates(const LHSImage &LHSImg,
-                                     const RHSImage &RHSImg, wdp::Coordinates C,
+                                     const RHSImage &RHSImg,
+                                     wdp::Offset CentreOffset,
                                      const wdp::SearchParameters &SearchParams,
                                      const wdp::DepthParameters &DepthParams) {
   // LHSImg and RHSImg input arguments must be 2D images.
   boost::function_requires<boost::gil::RandomAccess2DImageConcept<LHSImage>>();
   boost::function_requires<boost::gil::RandomAccess2DImageConcept<RHSImage>>();
 
+  wdp::Coordinates C = wdp::getCoordinates(LHSImg, CentreOffset);
   double Depth = wdp::getDepth(LHSImg, RHSImg, C, SearchParams, DepthParams);
-  wdp::Offset CentreOffset = wdp::getCentreOffset(LHSImg, C);
 
   return determineLocationOfPixelOffset(Depth, CentreOffset, DepthParams);
 }
@@ -72,11 +73,10 @@ bool locateObstacles(OccupancyMap<XMax, YMax, ZMax, CellSize> &OM,
       // Find which pixel coordinates need to be searched.
       wdp::Offset CentreOffset =
           determinePixelOffsetOfLocation(Loc, DepthParams);
-      wdp::Coordinates C = wdp::getCoordinates(LHSImg, CentreOffset);
 
       // Locate the obstacle at the pixel coordinates and update occupancy map.
       Location ObstacleLoc = locateObstacleAtCoordinates(
-          LHSImg, RHSImg, C, SearchParams, DepthParams);
+          LHSImg, RHSImg, CentreOffset, SearchParams, DepthParams);
 
       // Some obstacles are too far away to place on the occupancy map.
       if (!(ObstacleLoc.X < (std::ptrdiff_t)XMax &&
