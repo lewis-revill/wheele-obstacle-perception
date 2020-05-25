@@ -24,10 +24,10 @@
 using namespace wop;
 
 Location wop::convertToLocation(PolarLocation P) {
-  std::ptrdiff_t X = P.Depth * cos(P.Rotation) * sin(P.Inclination);
-  std::ptrdiff_t Y = P.Depth * sin(P.Rotation) * sin(P.Inclination);
+  std::ptrdiff_t X = round(P.Depth * cos(P.Rotation) * sin(P.Inclination));
+  std::ptrdiff_t Y = round(P.Depth * sin(P.Rotation) * sin(P.Inclination));
 
-  std::ptrdiff_t Z = P.Depth * cos(P.Inclination);
+  std::ptrdiff_t Z = round(P.Depth * cos(P.Inclination));
 
   return Location(X, Y, Z);
 }
@@ -51,8 +51,10 @@ wop::determinePixelOffsetOfLocation(PolarLocation P,
   double TrueYCentreOffset =
       DepthParams.FocalLength * sin(P.Rotation) * tan(P.Inclination);
 
-  std::ptrdiff_t XCentreOffset = TrueXCentreOffset / DepthParams.PixelScale;
-  std::ptrdiff_t YCentreOffset = TrueYCentreOffset / DepthParams.PixelScale;
+  std::ptrdiff_t XCentreOffset =
+      round(TrueXCentreOffset / DepthParams.PixelScale);
+  std::ptrdiff_t YCentreOffset =
+      round(TrueYCentreOffset / DepthParams.PixelScale);
 
   return wdp::Offset(XCentreOffset, YCentreOffset);
 }
