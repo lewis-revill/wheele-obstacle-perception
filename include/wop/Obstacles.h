@@ -34,11 +34,10 @@ namespace wop {
 /// Given the coordinates to search around, determine the location in space of
 /// the obstacle at those coordinates.
 template <typename LHSImage, typename RHSImage>
-PolarLocation
-locateObstacleAtCoordinates(const LHSImage &LHSImg, const RHSImage &RHSImg,
-                            wdp::Coordinates C,
-                            const wdp::SearchParameters &SearchParams,
-                            const wdp::DepthParameters &DepthParams) {
+Location locateObstacleAtCoordinates(const LHSImage &LHSImg,
+                                     const RHSImage &RHSImg, wdp::Coordinates C,
+                                     const wdp::SearchParameters &SearchParams,
+                                     const wdp::DepthParameters &DepthParams) {
   // LHSImg and RHSImg input arguments must be 2D images.
   boost::function_requires<boost::gil::RandomAccess2DImageConcept<LHSImage>>();
   boost::function_requires<boost::gil::RandomAccess2DImageConcept<RHSImage>>();
@@ -69,17 +68,15 @@ bool locateObstacles(OccupancyMap<XMax, YMax, ZMax, CellSize> &OM,
     for (std::ptrdiff_t Y = -_YMax; Y < _YMax; Y += CellSize) {
 
       Location Loc(X, Y, ZMax);
-      PolarLocation PolarLoc = convertToPolarLocation(Loc);
 
       // Find which pixel coordinates need to be searched.
       wdp::Offset CentreOffset =
-          determinePixelOffsetOfLocation(PolarLoc, DepthParams);
+          determinePixelOffsetOfLocation(Loc, DepthParams);
       wdp::Coordinates C = wdp::getCoordinates(LHSImg, CentreOffset);
 
       // Locate the obstacle at the pixel coordinates and update occupancy map.
-      PolarLocation ObstaclePolarLoc = locateObstacleAtCoordinates(
+      Location ObstacleLoc = locateObstacleAtCoordinates(
           LHSImg, RHSImg, C, SearchParams, DepthParams);
-      Location ObstacleLoc = convertToLocation(ObstaclePolarLoc);
 
       // Some obstacles are too far away to place on the occupancy map.
       if (!(ObstacleLoc.X < (std::ptrdiff_t)XMax &&

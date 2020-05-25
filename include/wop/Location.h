@@ -41,35 +41,15 @@ struct Location {
       : X(_X), Y(_Y), Z(_Z) {}
 };
 
-/// A location of an object relative to the camera, represented using a depth
-/// and angles. The inclination represents the angle to the z axis, and rotation
-/// represents the rotation around the x/y plane, from the positive x axis.
-struct PolarLocation {
-  double Depth;
-  double Inclination;
-  double Rotation;
-
-  PolarLocation(double _Depth, double _Inclination, double _Rotation)
-      : Depth(_Depth), Inclination(_Inclination), Rotation(_Rotation) {}
-};
-
-/// Convert a location represented with depth and angles to a location
-/// represented with X, Y and Z values.
-Location convertToLocation(PolarLocation P);
-
-/// Convert a location represented with X, Y and Z values to a location
-/// represented with depth and angles.
-PolarLocation convertToPolarLocation(Location Loc);
-
 /// Determine the offset from the centre of an image of the pixel where an
 /// obstacle at the given location would appear.
 wdp::Offset
-determinePixelOffsetOfLocation(PolarLocation P,
+determinePixelOffsetOfLocation(Location Loc,
                                const wdp::DepthParameters &DepthParams);
 
-/// Determine the polar location of an obstacle at a given depth, detected at a
+/// Determine the location of an obstacle at a given depth, detected at a
 /// pixel which is offset from the centre of an image by a given amount.
-PolarLocation
+Location
 determineLocationOfPixelOffset(double Depth, wdp::Offset CentreOffset,
                                const wdp::DepthParameters &DepthParams);
 
