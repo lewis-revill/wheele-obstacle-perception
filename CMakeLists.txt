@@ -38,5 +38,6 @@ include_directories(${WDP_INCLUDE_DIR})
 
 add_subdirectory(lib)
 add_subdirectory(tools)
+add_subdirectory(unittest)
 
 configure_file(WOPConfig.h.in WOPConfig.h)
